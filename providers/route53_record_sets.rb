@@ -29,37 +29,41 @@ def aws_command
 end
 
 action :upsert do
-  directory json_dir do
-    recursive true
-  end
-  template json do
-    source 'route53_record_sets.json.erb'
-    cookbook 'aws_cli'
-    variables(
-      method: 'UPSERT',
-      public_dns_name: new_resource.public_dns_name,
-      hosts: new_resource.hosts
-    )
-  end
-  bash "route53_record_sets upsert #{new_resource.name}" do
-    code aws_command
+  if new_resource.hosts.length > 0
+    directory json_dir do
+      recursive true
+    end
+    template json do
+      source 'route53_record_sets.json.erb'
+      cookbook 'aws_cli'
+      variables(
+        method: 'UPSERT',
+        public_dns_name: new_resource.public_dns_name,
+        hosts: new_resource.hosts
+      )
+    end
+    bash "route53_record_sets upsert #{new_resource.name}" do
+      code aws_command
+    end
   end
 end
 
 action :delete do
-  directory json_dir do
-    recursive true
-  end
-  template json do
-    source 'route53_record_sets.json.erb'
-    cookbook 'aws_cli'
-    variables(
-      method: 'DELETE',
-      public_dns_name: new_resource.public_dns_name,
-      hosts: new_resource.hosts
-    )
-  end
-  bash "route53_record_sets delete #{new_resource.name}" do
-    code aws_command
+  if new_resource.hosts.length > 0
+    directory json_dir do
+      recursive true
+    end
+    template json do
+      source 'route53_record_sets.json.erb'
+      cookbook 'aws_cli'
+      variables(
+        method: 'DELETE',
+        public_dns_name: new_resource.public_dns_name,
+        hosts: new_resource.hosts
+      )
+    end
+    bash "route53_record_sets delete #{new_resource.name}" do
+      code aws_command
+    end
   end
 end
