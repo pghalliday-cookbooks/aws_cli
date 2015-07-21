@@ -6,10 +6,10 @@
       "Action": "<%= @method %>",
       "ResourceRecordSet": {
         "Name": "<%= @hosts[index] %>.",
-        "Type": "CNAME",
+        "Type": "A",
         "TTL": 900,
         "ResourceRecords": [{
-          "Value": "<%= @public_dns_name %>"
+          "Value": "<%= @ip %>"
         }]
       }
     }

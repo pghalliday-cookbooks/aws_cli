@@ -38,7 +38,7 @@ action :upsert do
       cookbook 'aws_cli'
       variables(
         method: 'UPSERT',
-        public_dns_name: new_resource.public_dns_name,
+        ip: new_resource.ip,
         hosts: new_resource.hosts
       )
     end
@@ -58,7 +58,7 @@ action :delete do
       cookbook 'aws_cli'
       variables(
         method: 'DELETE',
-        public_dns_name: new_resource.public_dns_name,
+        ip: new_resource.ip,
         hosts: new_resource.hosts
       )
     end
