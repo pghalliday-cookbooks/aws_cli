@@ -5,13 +5,13 @@ module S3api
 
     public
     def initialize(region, bucket, key, access_key_id, secret_access_key, kms)
-      @command = aws_command(region, bucket, key, temp_file.path, access_key_id, secret_access_key, kms)
+      @command = aws_command(region, bucket, key, access_key_id, secret_access_key, kms)
     end
 
     def read
       temp_file = Tempfile.new('s3api_get_object_json')
       begin
-        get_object = Mixlib::ShellOut.new @command
+        get_object = Mixlib::ShellOut.new "#{@command} #{temp_file.path}"
         get_object.run_command
         get_object.error!
         File.read(temp_file)
@@ -41,15 +41,14 @@ module S3api
       end
     end
 
-    def aws_command (region, bucket, key, path, access_key_id, secret_access_key, kms)
+    def aws_command (region, bucket, key, access_key_id, secret_access_key, kms)
       [
         aws_authentication(access_key_id, secret_access_key),
         aws_config(kms),
         'aws s3api get-object',
         "--region #{region}",
         "--bucket #{bucket}",
-        "--key #{key}",
-        path
+        "--key #{key}"
       ].join(' ')
     end
 
