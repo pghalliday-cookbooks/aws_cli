@@ -1,9 +1,26 @@
 require 'tempfile'
 
 module S3api
+  class GetObject
 
-  def S3api.get_object (region, bucket, key, access_key_id, secret_access_key, kms)
+    public
+    def initialize(region, bucket, key, access_key_id, secret_access_key, kms)
+      @command = aws_command(region, bucket, key, temp_file.path, access_key_id, secret_access_key, kms)
+    end
 
+    def read
+      temp_file = Tempfile.new('s3api_get_object_json')
+      begin
+        get_object = Mixlib::ShellOut.new @command
+        get_object.run_command
+        get_object.error!
+        File.read(temp_file)
+      ensure
+        temp_file.unlink
+      end
+    end
+
+    private
     def aws_authentication (access_key_id, secret_access_key)
       if access_key_id
         [
@@ -36,15 +53,5 @@ module S3api
       ].join(' ')
     end
 
-    temp_file = Tempfile.new('s3api_json')
-    begin
-      get_object = Mixlib::ShellOut.new aws_command(region, bucket, key, temp_file.path, access_key_id, secret_access_key, kms)
-      get_object.run_command
-      get_object.error!
-      File.read(temp_file)
-    ensure
-      temp_file.unlink
-    end
   end
-
 end
