@@ -33,7 +33,7 @@ module S3api
     end
 
     def aws_config (kms)
-      kms_config = ::File.join(Chef::Config['file_cache_path'], 'kmsconfig')
+      kms_config = ::File.join(Chef::Config['file_cache_path'], 'aws_cli/kmsconfig')
       if kms
         "AWS_CONFIG_FILE=#{kms_config}"
       else
