@@ -11,7 +11,7 @@ bash 'install AWS CLI tools' do
   not_if { ::File.exist?('/usr/bin/aws') }
 end
 
-kms_config = ::File.join(cache, 'kmsconfig')
+kms_config = ::File.join(cache, 'kms-config')
 cookbook_file kms_config do
   mode 0666
 end
