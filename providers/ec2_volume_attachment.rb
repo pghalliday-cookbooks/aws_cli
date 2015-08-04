@@ -9,9 +9,11 @@ use_inline_resources
 def attach_command
   [
     ::File.join(Chef::Config['file_cache_path'], 'aws_cli/attach-ebs-volume.sh'),
+    new_resource.ruby,
     new_resource.volume_id,
     new_resource.instance_id,
     new_resource.device,
+    new_resource.region,
     new_resource.access_key_id,
     new_resource.secret_access_key
   ].join(' ')
@@ -20,8 +22,10 @@ end
 def detach_command
   [
     ::File.join(Chef::Config['file_cache_path'], 'aws_cli/detach-ebs-volume.sh'),
+    new_resource.ruby,
     new_resource.volume_id,
     new_resource.instance_id,
+    new_resource.region,
     new_resource.access_key_id,
     new_resource.secret_access_key
   ].join(' ')

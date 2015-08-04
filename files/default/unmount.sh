@@ -10,5 +10,3 @@ fi
 if mount | grep ^$DEVICE >/dev/null; then
   umount $DEVICE
 fi
-
-rmdir $MOUNT_POINT
