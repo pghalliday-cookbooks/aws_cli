@@ -51,6 +51,7 @@ end
 action :attach do
   bash "attach and mount EBS volume #{new_resource.name}" do
     code <<-EOH
+    set -e
     #{attach_command}
     #{mount_command}
     EOH
@@ -60,6 +61,7 @@ end
 action :detach do
   bash "unmount and detach EBS volume #{new_resource.name}" do
     code <<-EOH
+    set -e
     #{unmount_command}
     #{detach_command}
     EOH
