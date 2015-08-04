@@ -1,4 +1,6 @@
-#/bin/bash -e
+#/bin/bash
+
+set -e
 
 DEVICE=$1
 MOUNT_POINT=$2

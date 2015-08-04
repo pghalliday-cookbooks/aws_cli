@@ -1,4 +1,6 @@
-#/bin/bash -e
+#/bin/bash
+
+set -e
 
 RUBY=$1
 VOLUME_ID=$2
