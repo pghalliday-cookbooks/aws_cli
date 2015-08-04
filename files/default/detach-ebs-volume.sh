@@ -16,8 +16,10 @@ function get_state {
   "
 }
 
-aws --region $REGION ec2 detach-volume --volume-id $VOLUME_ID --instance-id $INSTANCE_ID
+if ! [ "$(get_state)" == "available" ]; then
+  aws --region $REGION ec2 detach-volume --volume-id $VOLUME_ID --instance-id $INSTANCE_ID
 
-while ! [ "$(get_state)" == "available" ]; do
-  sleep 1
-done
+  while ! [ "$(get_state)" == "available" ]; do
+    sleep 1
+  done
+fi

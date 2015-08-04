@@ -17,8 +17,10 @@ function get_state {
   "
 }
 
-aws --region $REGION ec2 attach-volume --volume-id $VOLUME_ID --instance-id $INSTANCE_ID --device $DEVICE
+if ! [ "$(get_state)" == "in-use" ]; then
+  aws --region $REGION ec2 attach-volume --volume-id $VOLUME_ID --instance-id $INSTANCE_ID --device $DEVICE
 
-while ! [ "$(get_state)" == "in-use" ]; do
-  sleep 1
-done
+  while ! [ "$(get_state)" == "in-use" ]; do
+    sleep 1
+  done
+fi
