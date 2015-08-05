@@ -65,5 +65,6 @@ action :detach do
     #{unmount_command}
     #{detach_command}
     EOH
+    ignore_failure true
   end
 end
