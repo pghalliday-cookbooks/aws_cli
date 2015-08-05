@@ -1,26 +1,31 @@
 require 'tempfile'
 
 module S3api
-  class GetObject
+  class Object
 
-    public
-    def initialize(region, bucket, key, access_key_id, secret_access_key, kms)
-      @command = aws_command(region, bucket, key, access_key_id, secret_access_key, kms)
-    end
-
-    def read
+    def self.get(region, bucket, key, access_key_id, secret_access_key, kms)
       temp_file = Tempfile.new('s3api_get_object_json')
+      temp_config = Tempfile.new('s3api_get_object_config')
+      if kms
+        temp_config.write <<-EOH
+[default]
+s3 =
+    signature_version = s3v4
+EOH
+        temp_config.close
+      end
+      command = aws_command region, bucket, key, access_key_id, secret_access_key, temp_config.path
       begin
-        get_object = Mixlib::ShellOut.new "#{@command} #{temp_file.path}"
+        get_object = Mixlib::ShellOut.new "#{command} #{temp_file.path}"
         get_object.run_command
         get_object.error!
-        File.read(temp_file)
+        yield File.read(temp_file)
       ensure
         temp_file.unlink
+        temp_config.unlink
       end
     end
 
-    private
     def aws_authentication (access_key_id, secret_access_key)
       if access_key_id
         [
@@ -32,19 +37,10 @@ module S3api
       end
     end
 
-    def aws_config (kms)
-      kms_config = ::File.join(Chef::Config['file_cache_path'], 'aws_cli/kms-config')
-      if kms
-        "AWS_CONFIG_FILE=#{kms_config}"
-      else
-        ''
-      end
-    end
-
-    def aws_command (region, bucket, key, access_key_id, secret_access_key, kms)
+    def aws_command (region, bucket, key, access_key_id, secret_access_key, config)
       [
         aws_authentication(access_key_id, secret_access_key),
-        aws_config(kms),
+        "AWS_CONFIG_FILE=#{config}",
         'aws s3api get-object',
         "--region #{region}",
         "--bucket #{bucket}",

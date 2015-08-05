@@ -1,3 +1,0 @@
-[default]
-s3 =
-    signature_version = s3v4
