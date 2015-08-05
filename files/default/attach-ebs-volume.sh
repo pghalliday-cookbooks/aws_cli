@@ -23,7 +23,7 @@ function get_state {
   attachment_state = 'n/a'
   attachment_instance_id = 'n/a'
   if state == 'in use'
-    attachment = description['Attachments'][0][
+    attachment = description['Attachments'][0]
     attachment_state = attachment['State']
     attachment_instance_id = attachment['InstanceId']
   end
