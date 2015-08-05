@@ -16,7 +16,7 @@ function get_state {
   description = JSON.parse(ARGF.read)['Volumes'][0]
   state = description['State']
   state = description['Attachments'][0]['State'] if state == 'in-use'
-  print JSON.parse(ARGF.read)['Volumes'][0]['State']
+  print state
   "
 }
 
