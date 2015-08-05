@@ -33,9 +33,9 @@ function get_state {
 
 function set_state_vars {
   states_and_instance=$(get_state)
-  STATE=$(echo $states_and_instance | cut -f1)
-  ATTACHMENT_STATE=$(echo $states_and_instance | cut -f2)
-  ATTACHMENT_INSTANCE_ID=$(echo $states_and_instance | cut -f3)
+  STATE=$(echo $states_and_instance | cut -f1 -d' ')
+  ATTACHMENT_STATE=$(echo $states_and_instance | cut -f2 -d' ')
+  ATTACHMENT_INSTANCE_ID=$(echo $states_and_instance | cut -f3 -d' ')
 }
 
 set_state_vars
