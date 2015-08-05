@@ -27,7 +27,7 @@ function get_state {
     attachment_state = attachment['State']
     attachment_instance_id = attachment['InstanceId']
   end
-  print \"#{state} #{attachment_state} #{instance_id}\"
+  print \"#{state} #{attachment_state} #{attachment_instance_id}\"
   "
 }
 
