@@ -13,14 +13,17 @@ AWS_SECRET_ACCESS_KEY=$7
 function get_state {
   aws --region $REGION ec2 describe-volumes --volume-ids $VOLUME_ID | $RUBY -e "
   require 'json'
+  description = JSON.parse(ARGF.read)['Volumes'][0]
+  state = description['State']
+  state = description['Attachments'][0]['State'] if state == 'in-use'
   print JSON.parse(ARGF.read)['Volumes'][0]['State']
   "
 }
 
-if ! [ "$(get_state)" == "in-use" ]; then
+if ! [ "$(get_state)" == "attached" ]; then
   aws --region $REGION ec2 attach-volume --volume-id $VOLUME_ID --instance-id $INSTANCE_ID --device $DEVICE
 
-  while ! [ "$(get_state)" == "in-use" ]; do
+  while ! [ "$(get_state)" == "attached" ]; do
     sleep 1
   done
 fi
