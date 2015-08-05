@@ -7,10 +7,10 @@ module AwsCliS3Json
     whichAws.run_command
     if whichAws.error?
       # aws command not available so install it now
-      installPython = Mixlib::ShellOut.new('apt-get install python')
+      installPython = Mixlib::ShellOut.new('apt-get -y install python')
       installPython.run_command
       installPython.error!
-      installPythonPip = Mixlib::ShellOut.new('apt-get install python-pip')
+      installPythonPip = Mixlib::ShellOut.new('apt-get -y install python-pip')
       installPythonPip.run_command
       installPythonPip.error!
       installAws = Mixlib::ShellOut.new('pip install awscli')
