@@ -14,8 +14,7 @@ function get_state {
   aws --region $REGION ec2 describe-volumes --volume-ids $VOLUME_ID | $RUBY -e "
   require 'json'
   json = ARGF.read
-  STDERR.puts json
-  description = JSON.parse(ARGF.read)['Volumes'][0]
+  description = JSON.parse(json)['Volumes'][0]
   state = description['State']
   state = description['Attachments'][0]['State'] if state == 'in-use'
   print state
