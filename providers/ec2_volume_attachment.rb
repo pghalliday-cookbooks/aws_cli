@@ -36,7 +36,9 @@ def mount_command
     ::File.join(Chef::Config['file_cache_path'], 'aws_cli/initialise-and-mount.sh'),
     new_resource.device,
     new_resource.file_system,
-    new_resource.mount_point
+    new_resource.mount_point,
+    new_resource.owner,
+    new_resource.group
   ].join(' ')
 end
 
