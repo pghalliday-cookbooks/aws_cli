@@ -13,7 +13,8 @@ if [ "$(file -sL $DEVICE)" == "$DEVICE: data" ]; then
 fi
 
 if ! grep ^$DEVICE /etc/fstab; then
-  cat >> /etc/fstab <<< "$DEVICE $MOUNT_POINT $FILE_SYSTEM defaults,nofail,uid=$USER,gid=$GROUP 0 2"
+  cat >> /etc/fstab <<< "$DEVICE $MOUNT_POINT $FILE_SYSTEM defaults,nofail 0 2"
 fi
 
 mount -a
+chown -R $USER:$GROUP $MOUNT_POINT
